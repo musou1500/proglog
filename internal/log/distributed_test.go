@@ -2,7 +2,6 @@ package log
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net"
 	"os"
 	"reflect"
@@ -20,7 +19,7 @@ func TestMultipleNodes(t *testing.T) {
 	nodeCount := 3
 	ports := dynaport.Get(nodeCount)
 	for i := 0; i < nodeCount; i++ {
-		dataDir, err := ioutil.TempDir("", "distributed-log-test")
+		dataDir, err := os.MkdirTemp("", "distributed-log-test")
 		require.NoError(t, err)
 		defer func(dir string) {
 			_ = os.RemoveAll(dir)
