@@ -19,14 +19,6 @@ type index struct {
 	size uint64
 }
 
-type Config struct {
-	Segment struct {
-		MaxStoreBytes uint64
-		MaxIndexBytes uint64
-		InitialOffset uint64
-	}
-}
-
 func newIndex(f *os.File, c Config) (*index, error) {
 	idx := &index{
 		file: f,

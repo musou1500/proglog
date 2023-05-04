@@ -47,6 +47,7 @@ func TestAgent(t *testing.T) {
 			startJoinAddrs = append(startJoinAddrs, agents[0].Config.BindAddr)
 		}
 		agent, err := New(Config{
+			Bootstrap:       i == 0,
 			ServerTLSConfig: serverTLSConfig,
 			PeerTLSConfig:   peerTLSConfig,
 			DataDir:         dataDir,
