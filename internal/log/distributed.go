@@ -16,6 +16,8 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+var _ raft.FSM = (*fsm)(nil)
+
 type fsm struct {
 	log *Log
 }
@@ -208,6 +210,8 @@ func (f *fsm) Snapshot() (raft.FSMSnapshot, error) {
 	return &snapshot{reader: r}, nil
 }
 
+var _ raft.FSMSnapshot = (*snapshot)(nil)
+
 type snapshot struct{ reader io.Reader }
 
 func (s *snapshot) Persist(sink raft.SnapshotSink) error {
@@ -251,6 +255,8 @@ func (f *fsm) Restore(r io.ReadCloser) error {
 	}
 	return nil
 }
+
+var _ raft.LogStore = (*logStore)(nil)
 
 type logStore struct {
 	*Log
