@@ -10,6 +10,7 @@ import (
 
 	api "github.com/musou1500/proglog/api/v1"
 	"github.com/musou1500/proglog/internal/config"
+	"github.com/musou1500/proglog/internal/loadbalance"
 	"github.com/stretchr/testify/require"
 	"github.com/travisjeffery/go-dynaport"
 	"google.golang.org/grpc"
@@ -119,9 +120,7 @@ func client(t *testing.T, agent *Agent, tlsConfig *tls.Config) api.LogClient {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(tlsCreds)}
 	rpcAddr, err := agent.Config.RPCAddr()
 	require.NoError(t, err)
-	conn, err := grpc.Dial(rpcAddr, opts...)
-	// TODO: investigate it is really necessary to use loadbalance
-	// conn, err := grpc.Dial(fmt.Sprintf("%s:///%s", loadbalance.Name, rpcAddr), opts...)
+	conn, err := grpc.Dial(fmt.Sprintf("%s:///%s", loadbalance.Name, rpcAddr), opts...)
 	require.NoError(t, err)
 	client := api.NewLogClient(conn)
 	return client

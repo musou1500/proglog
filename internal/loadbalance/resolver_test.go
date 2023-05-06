@@ -49,7 +49,7 @@ func TestResolver(t *testing.T) {
 		DialCreds: clientCreds,
 	}
 	r := Resolver{}
-	addrUrl, err := url.Parse(resolver.GetDefaultScheme() + ":///" + l.Addr().String())
+	addrUrl, err := url.Parse(Name + ":///" + l.Addr().String())
 	require.NoError(t, err)
 	_, err = r.Build(resolver.Target{
 		URL: *addrUrl,
