@@ -81,6 +81,7 @@ func TestAgent(t *testing.T) {
 		},
 	)
 	require.NoError(t, err)
+	time.Sleep(3 * time.Second)
 	consumeResponse, err := leaderClient.Consume(
 		context.Background(),
 		&api.ConsumeRequest{
@@ -90,7 +91,6 @@ func TestAgent(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, consumeResponse.Record.Value, []byte("foo"))
 	// wait for replication
-	time.Sleep(3 * time.Second)
 	followerClient := client(t, agents[1], peerTLSConfig)
 	consumeResponse, err = followerClient.Consume(
 		context.Background(),
@@ -120,6 +120,8 @@ func client(t *testing.T, agent *Agent, tlsConfig *tls.Config) api.LogClient {
 	rpcAddr, err := agent.Config.RPCAddr()
 	require.NoError(t, err)
 	conn, err := grpc.Dial(rpcAddr, opts...)
+	// TODO: investigate it is really necessary to use loadbalance
+	// conn, err := grpc.Dial(fmt.Sprintf("%s:///%s", loadbalance.Name, rpcAddr), opts...)
 	require.NoError(t, err)
 	client := api.NewLogClient(conn)
 	return client
