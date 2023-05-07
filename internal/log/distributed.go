@@ -127,7 +127,7 @@ func (l *DistributedLog) setupRaft(dataDir string) error {
 		config := raft.Configuration{
 			Servers: []raft.Server{{
 				ID:      config.LocalID,
-				Address: transport.LocalAddr(),
+				Address: raft.ServerAddress(l.config.Raft.BindAddr),
 			}},
 		}
 		err = l.raft.BootstrapCluster(config).Error()
@@ -438,10 +438,11 @@ func (l *DistributedLog) GetServers() ([]*api.Server, error) {
 	}
 	var servers []*api.Server
 	for _, server := range future.Configuration().Servers {
+		_, id := l.raft.LeaderWithID()
 		servers = append(servers, &api.Server{
 			Id:       string(server.ID),
 			RpcAddr:  string(server.Address),
-			IsLeader: server.Address == l.raft.Leader(),
+			IsLeader: raft.ServerID(server.ID) == id,
 		})
 	}
 	return servers, nil

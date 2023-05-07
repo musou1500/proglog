@@ -49,6 +49,7 @@ func SetupTLSConfig(cfg TLSConfig) (*tls.Config, error) {
 			tlsConfig.RootCAs = ca
 		}
 		tlsConfig.ServerName = cfg.ServerAddress
+		tlsConfig.InsecureSkipVerify = tlsConfig.ServerName == ""
 	}
 	return tlsConfig, nil
 }

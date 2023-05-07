@@ -12,5 +12,6 @@ type Config struct {
 		raft.Config
 		StreamLayer *StreamLayer
 		Bootstrap   bool
+		BindAddr    string
 	}
 }

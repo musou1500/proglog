@@ -30,3 +30,7 @@ go.work
 
 /config/*
 !/config/.gitkeep
+
+/deploy/instance-*
+/deploy/proglog
+

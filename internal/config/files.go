@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -22,6 +21,9 @@ func configFile(filename string) string {
 	if dir := os.Getenv("CONFIG_DIR"); dir != "" {
 		return filepath.Join(dir, filename)
 	}
-
-	panic(fmt.Errorf("CONFIG_DIR is not defined, cannot find %s", filename))
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+	return filepath.Join(homeDir, ".proglog", filename)
 }
