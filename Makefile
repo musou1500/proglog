@@ -1,4 +1,5 @@
 CONFIG_PATH=$(shell pwd)/config
+TAG ?= 0.0.1
 
 
 $(CONFIG_PATH)/model.conf:
@@ -7,7 +8,10 @@ $(CONFIG_PATH)/model.conf:
 $(CONFIG_PATH)/policy.csv:
 	cp test/policy.csv $(CONFIG_PATH)/policy.csv
 
-.PHONY: test compile gencert
+.PHONY: test compile gencert build-docker
+
+build:
+	CGO_ENABLED=0 go build -o ./deploy/proglog ./cmd/proglog
 
 compile:
 	protoc --go_out=. \
